@@ -17,8 +17,8 @@ class User(Base):
     telegram_id: Mapped[str] = mapped_column(String(255), unique=True)
     balance: Mapped[int] = mapped_column(BigInteger())
 
-    transactions_sent: Mapped[List["Transaction"]] = relationship(back_populates="sender")
-    transactions_recieved: Mapped[List["Transaction"]] = relationship(back_populates="reciever")
+    transactions_sent: Mapped[List["Transaction"]] = relationship(back_populates="sender", foreign_keys="[Transaction.sender_id]")
+    transactions_recieved: Mapped[List["Transaction"]] = relationship(back_populates="reciever", foreign_keys="[Transaction.reciever_id]")
 
 
 class Transaction(Base):
@@ -30,5 +30,5 @@ class Transaction(Base):
     amount: Mapped[int] = mapped_column(BigInteger())
     timestamp: Mapped[str] = mapped_column(TIMESTAMP(), server_default=func.now())
 
-    sender: Mapped["User"] = relationship(back_populates="transactions_sent")
-    reciever: Mapped["User"] = relationship(back_populates="transactions_recieved")
+    sender: Mapped["User"] = relationship(back_populates="transactions_sent", foreign_keys=[sender_id])
+    reciever: Mapped["User"] = relationship(back_populates="transactions_recieved", foreign_keys=[reciever_id])

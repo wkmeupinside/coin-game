@@ -5,6 +5,8 @@ import asyncio
 import logging
 import sys
 
+from routers.balance import router as balance_router
+
 from config import TOKEN
 
 from database.models import User
@@ -41,18 +43,12 @@ async def on_command_start(message: types.Message) -> None:
             "Добро пожаловать в игру!"
     )
 
-@dp.message()
-async def on_message(message: types.Message) -> None:
-    try:
-        await message.send_copy(chat_id=message.chat.id)
-    except TypeError:
-        await message.answer("Тише дочка")
-
-
 async def main() -> None:
     bot = Bot(token=TOKEN, parse_mode=enums.ParseMode.HTML)
     await bot.delete_webhook(drop_pending_updates=True)
     
+    dp.include_routers(balance_router)
+
     await dp.start_polling(bot)
 
 
