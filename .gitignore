@@ -2,3 +2,4 @@
 /venv
 /alembic.ini
 /database.db
+__pycache__
